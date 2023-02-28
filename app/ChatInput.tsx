@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
+import { Message } from "../typings";
 
 function ChatInput() {
   const [input, setInput] = useState("");
@@ -7,11 +9,40 @@ function ChatInput() {
   const addMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!input ) return;
+    if (!input) return;
 
     const messageToSend = input;
 
     setInput("");
+
+    const id = uuid();
+
+    const message: Message = {
+      id,
+      message: messageToSend,
+      created_at: Date.now(),
+      username: "Vesko Portev",
+      profilePic:
+        "https://www.vesko.me/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F1fnxaayh%2Fproduction%2Feffe9909544bbbad56837ec584ebf67c1d389021-1080x1080.jpg&w=384&q=75",
+      email: "vesko@vesko.me",
+    };
+
+    const uploadMessageToUpstash = async () => {
+      const res = await fetch("/api/addMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+        }),
+      });
+      
+      const data = await res.json();
+      console.log("Message ADDED >>>", data)
+    };
+
+    uploadMessageToUpstash();
   };
 
   return (
