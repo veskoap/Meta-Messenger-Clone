@@ -1,11 +1,18 @@
 "use client";
 import React, { useState } from "react";
+import { useSWRConfig } from "swr";
 import { v4 as uuid } from "uuid";
 import { Message } from "../typings";
+import useSWR from "swr";
+import fetcher from "../utils/fetchMessages";
 
 function ChatInput() {
   const [input, setInput] = useState("");
+  const { data, error, mutate } = useSWR("/api/getMessages", fetcher);
 
+  console.log(data);
+
+  
   const addMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
