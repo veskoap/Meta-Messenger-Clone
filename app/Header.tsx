@@ -1,11 +1,13 @@
 import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import LogoutButton from "./LogoutButton";
 
-async function Header() {
-  const session = await getServerSession();
+
+ function Header() {
+  const { data: session } = useSession();
 
   if (session)
     return (
